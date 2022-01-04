@@ -19,14 +19,14 @@ from azure.iot.device import MethodResponse
 from azure.iot.device import exceptions
 
 # device settings - FILL IN YOUR VALUES HERE
-scope_id = "<Put your scope id here from IoT Central Administration -> Device connection>"
-group_symmetric_key = "<Put your group SAS primary key here from IoT Central Administration -> Device Connection -> SAS-IoT-Devices>"
+scope_id = "0ne0005C8ED"
+group_symmetric_key = "tzR2IDTirROdS3jg0KrYIs6j/+xTxgHYcs6EpYt/ibCpASN6nfX8vSMouw7LhcMGxAcmKUxVOkEhrYSaR1l8dA=="
 
 
 # optional device settings - CHANGE IF DESIRED/NECESSARY
 provisioning_host = "global.azure-devices-provisioning.net"
 device_id = "opcua_client_1"
-model_id = ""  # This model is available in the root of the Github repo (Failover.json) and can be imported into your Azure IoT central application
+model_id = ""
 
 variable_nodes = []
 send_frequency = 1
@@ -101,7 +101,8 @@ async def send_to_central(data):
         elif str(type(data["value"])).startswith("<class"):
             value = json_dump_struct(data["value"])
 
-        payload = f'{{"nodeid": "{data["nodeid"]}", "name": "{data["name"]}", "source_time_stamp": "{data["source_time_stamp"]}", "value": {value}}}'
+        #payload = f'{{"nodeid": "{data["nodeid"]}", "name": "{data["name"]}", "source_time_stamp": "{data["source_time_stamp"]}", "value": {value}}}'
+        payload = f'{{"{data["nodeid"]}": {{"name": "{data["name"]}", "source_time_stamp": "{data["source_time_stamp"]}", "value": {value}}}}}'
         print("sending message: %s" % (payload))
         msg = Message(payload)
         msg.content_type = "application/json"
