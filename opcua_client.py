@@ -19,8 +19,8 @@ from azure.iot.device import MethodResponse
 from azure.iot.device import exceptions
 
 # device settings - FILL IN YOUR VALUES HERE
-scope_id = "0ne0005C8ED"
-group_symmetric_key = "tzR2IDTirROdS3jg0KrYIs6j/+xTxgHYcs6EpYt/ibCpASN6nfX8vSMouw7LhcMGxAcmKUxVOkEhrYSaR1l8dA=="
+scope_id = ""
+group_symmetric_key = ""
 
 
 # optional device settings - CHANGE IF DESIRED/NECESSARY
@@ -63,7 +63,8 @@ def walk_variables(object):
                 for sub_var in variable.get_value().ua_types:
                     print("        - {}".format(sub_var[0]))              
         else:
-            var_stack.append(variable)
+            for child in children:
+                var_stack.append(child)
 
 
 # def opcua_read_thread(client):
