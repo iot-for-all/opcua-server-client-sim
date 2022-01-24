@@ -37,6 +37,25 @@ def getdelta(type, function):
             delta_value = delta_value * -1
     return delta_value
 
+def process_children(children, parent):
+    for child in children:
+        if child["type"] == "object":
+            new_obj = parent.add_object(idx, child["name"])
+            process_children(child["children"], new_obj)
+        else:
+            new_variable_state = child
+            variable_states.append(new_variable_state)
+
+            new_variable_state["var"] = None
+            datatype = ua.VariantType.__dict__.get(child["type"])
+            if datatype:
+                new_variable_state["var"] = parent.add_variable(idx, child["name"], child["value"], datatype)
+            else:
+                # assume this is a custom datatype/struct
+                new_variable_state["var"] = parent.add_variable(idx, child["name"], ua.Variant(None, ua.VariantType.Null), datatype=custom_types[child["type"]].data_type)
+            if child["writable"]:
+                new_variable_state["var"].set_writable()
+
 if __name__ == "__main__":
     # load the config file
     f = open('opcua_server.json',)
@@ -50,6 +69,7 @@ if __name__ == "__main__":
     # setup our own namespace, not really necessary but should as spec
     uri = config["server"]["uri"]
     idx = server.register_namespace(uri)
+    server.set_server_name(config["server"]["name"])
 
     # custom structure storage
     datatype_builder = DataTypeDictionaryBuilder(server, idx, uri, 'customStructures')
@@ -70,23 +90,11 @@ if __name__ == "__main__":
 
     # populating our address space
     variable_states = []
+
     for object in config["objects"]:
         new_obj = objects.add_object(idx, object["name"])
-
-        # create the variables in the object
-        for variable in object["variables"]:
-            new_variable_state = variable
-            variable_states.append(new_variable_state)
-
-            new_variable_state["var"] = None
-            datatype = ua.VariantType.__dict__.get(variable["type"])
-            if datatype:
-                new_variable_state["var"] = new_obj.add_variable(idx, variable["name"], variable["value"], datatype)
-            else:
-                # assume this is a custom datatype/struct
-                new_variable_state["var"] = new_obj.add_variable(idx, variable["name"], ua.Variant(None, ua.VariantType.Null), datatype=custom_types[variable["type"]].data_type)
-            if variable["writable"]:
-                new_variable_state["var"].set_writable()
+        if object["children"]:
+            process_children(object["children"], new_obj)
 
     # start the server
     server.start()

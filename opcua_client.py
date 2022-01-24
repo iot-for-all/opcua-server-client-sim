@@ -1,10 +1,12 @@
 import sys
-#import threading
+
+# import threading
 import base64
 import hmac
 import hashlib
 import asyncio
-#import json
+
+# import json
 sys.path.insert(0, "..")
 
 from opcua import Client
@@ -19,13 +21,13 @@ from azure.iot.device import MethodResponse
 from azure.iot.device import exceptions
 
 # device settings - FILL IN YOUR VALUES HERE
-scope_id = "<Put your scope id here from IoT Central Administration -> Device connection>"
-group_symmetric_key = "<Put your group SAS primary key here from IoT Central Administration -> Device Connection -> SAS-IoT-Devices>"
+scope_id = "0ne00444031"
+group_symmetric_key = "ofBssFMd08Ut6PZf9htqUfxBvC1w/T8dca7sfvyydVVH6RZH0FB/1KbF0E7eLz+cwoGkyhzn3v62cmmb/9gb3g=="
 
 
 # optional device settings - CHANGE IF DESIRED/NECESSARY
 provisioning_host = "global.azure-devices-provisioning.net"
-device_id = "opcua_client_1"
+device_id = "factory_client"
 model_id = ""  # This model is available in the root of the Github repo (Failover.json) and can be imported into your Azure IoT central application
 
 variable_nodes = []
@@ -37,13 +39,41 @@ use_websockets = True
 device_client = None
 max_connection_attempt = 3
 
+
 class SubsriptionHandler(object):
     def datachange_notification(self, node, val, data):
         # don't try and do anything with the node as network calls to the server are not allowed outside of the main thread - so we just queue it
-        incoming_queue.append({"source_time_stamp": data.monitored_item.Value.SourceTimestamp.strftime("%m/%d/%Y, %H:%M:%S"), "nodeid": node, "value": val})
+        incoming_queue.append(
+            {
+                "source_time_stamp": data.monitored_item.Value.SourceTimestamp.strftime(
+                    "%m/%d/%Y, %H:%M:%S"
+                ),
+                "nodeid": node,
+                "value": val,
+            }
+        )
 
     def event_notification(self, event):
         print("Python: New event", event)
+
+
+def walk_objects(object):
+    variables = object.get_variables()
+    if object.get_display_name().to_string() != "Server":
+        incoming_queue.append(
+            {
+                "source_time_stamp": time.strftime(
+                    "%m/%d/%Y, %H:%M:%S", time.localtime()
+                ),
+                "nodeid": object.nodeid.to_string(),
+            }
+        )
+        if len(variables) == 0:
+            for child in object.get_children():
+                walk_objects(child)
+        else:
+            walk_variables(object)
+
 
 # stack is redundant right now but need to move server to nodes with node class as an attribute
 def walk_variables(object):
@@ -57,11 +87,13 @@ def walk_variables(object):
         children = variable.get_children()
         if len(children) == 0:
             variable_nodes.append(variable.nodeid.to_string())
-            print("    - {}".format(variable.get_display_name().to_string()))
+            print(
+                f"    - {variable.nodeid.to_string()} : {variable.get_display_name().to_string()}"
+            )
             if variable.get_data_type_as_variant_type().name == "ExtensionObject":
                 # get the struct members
                 for sub_var in variable.get_value().ua_types:
-                    print("        - {}".format(sub_var[0]))              
+                    print("        - {}".format(sub_var[0]))
         else:
             var_stack.append(variable)
 
@@ -75,6 +107,7 @@ def walk_variables(object):
 #             print("{} - {}".format(name, value))
 #         time.sleep(send_frequency)
 
+
 def json_dump_struct(struct_value):
     value = "{"
     first = True
@@ -84,7 +117,11 @@ def json_dump_struct(struct_value):
         else:
             first = False
         value = value + f'"{sub_var[0]}":'
-        if type(getattr(struct_value, sub_var[0])) == int or type(getattr(struct_value, sub_var[0])) == float or type(getattr(struct_value, sub_var[0])) == bool:
+        if (
+            type(getattr(struct_value, sub_var[0])) == int
+            or type(getattr(struct_value, sub_var[0])) == float
+            or type(getattr(struct_value, sub_var[0])) == bool
+        ):
             value = value + str(getattr(struct_value, sub_var[0]))
         elif str(type(getattr(struct_value, sub_var[0]))) == "string":
             value = value + f'"{getattr(struct_value, sub_var[0])}"'
@@ -92,34 +129,54 @@ def json_dump_struct(struct_value):
             value = value + json_dump_struct(getattr(struct_value, sub_var[0]))
     return value + "}"
 
+
 async def send_to_central(data):
     if device_client and device_client.connected:
-        if type(data["value"]) == int or type(data["value"]) == float or type(data["value"]) == bool:
+        if "value" not in data:
+            value = '"N/A"'
+        elif (
+            type(data["value"]) == int
+            or type(data["value"]) == float
+            or type(data["value"]) == bool
+        ):
             value = data["value"]
         elif str(type(data["value"])) == "string":
             value = f'"{data["value"]}"'
         elif str(type(data["value"])).startswith("<class"):
             value = json_dump_struct(data["value"])
+        else:
+            value = '"N/A"'
 
-        payload = f'{{"nodeid": "{data["nodeid"]}", "name": "{data["name"]}", "source_time_stamp": "{data["source_time_stamp"]}", "value": {value}}}'
+        payload = f'{{"nodeid": "{data["nodeid"]}", "name": "{data["name"]}","parent": "{data["parent"]}", "source_time_stamp": "{data["source_time_stamp"]}", "value": {value}}}'
         print("sending message: %s" % (payload))
         msg = Message(payload)
         msg.content_type = "application/json"
         msg.content_encoding = "utf-8"
         try:
-            #await asyncio.wait_for(device_client.send_message(msg), timeout=await_timeout)
+            # await asyncio.wait_for(device_client.send_message(msg), timeout=await_timeout)
             await device_client.send_message(msg)
             print("completed sending message")
         except asyncio.TimeoutError:
             print("call to send message to IoT Central timed out")
 
+
 async def incoming_queue_processor():
     while True:
         if len(incoming_queue) > 0:
             data = incoming_queue.pop(0)
-            data["name"] = opcua_client.get_node(data["nodeid"]).get_display_name().Text
-            print("[{}] {} - {}".format(data["source_time_stamp"], data["name"], data["value"]))
+            node = opcua_client.get_node(data["nodeid"])
+            parent = node.get_parent()
+            data["name"] = node.get_display_name().Text
+            data["parent"] = parent
+            print(
+                "[{}] {} - {}".format(
+                    data["source_time_stamp"],
+                    data["name"],
+                    data["value"] if "value" in data else "",
+                )
+            )
             await send_to_central(data)
+            await asyncio.sleep(5)
 
 
 # derives a symmetric device key for a device id using the group symmetric key
@@ -147,16 +204,24 @@ async def connect():
             registration_id=device_id,
             id_scope=scope_id,
             symmetric_key=device_symmetric_key,
-            websockets=use_websockets
+            websockets=use_websockets,
         )
 
         if model_id != "":
-            provisioning_device_client.provisioning_payload = '{"iotcModelId":"%s"}' % (model_id)
+            provisioning_device_client.provisioning_payload = '{"iotcModelId":"%s"}' % (
+                model_id
+            )
         registration_result = None
 
         try:
             registration_result = await provisioning_device_client.register()
-        except (exceptions.CredentialError, exceptions.ConnectionFailedError, exceptions.ConnectionDroppedError, exceptions.ClientError, Exception) as e:
+        except (
+            exceptions.CredentialError,
+            exceptions.ConnectionFailedError,
+            exceptions.ConnectionDroppedError,
+            exceptions.ClientError,
+            Exception,
+        ) as e:
             print("DPS registration exception: " + e)
             connection_attempt_count += 1
 
@@ -168,7 +233,7 @@ async def connect():
                 symmetric_key=device_symmetric_key,
                 hostname=registration_result.registration_state.assigned_hub,
                 device_id=registration_result.registration_state.device_id,
-                websockets=use_websockets
+                websockets=use_websockets,
             )
 
         try:
@@ -178,10 +243,14 @@ async def connect():
             print("connected to central")
 
         except Exception as e:
-            print("Connection failed, retry %d of %d" % (connection_attempt_count, max_connection_attempt))
+            print(
+                "Connection failed, retry %d of %d"
+                % (connection_attempt_count, max_connection_attempt)
+            )
             connection_attempt_count += 1
 
     return connected
+
 
 async def main():
     try:
@@ -196,12 +265,14 @@ async def main():
             root = opcua_client.get_root_node()
 
             # walk the objects and variable tree
-            objects = root.get_child(["0:Objects"]).get_children()
-            for object in objects:
-                print("- {}".format(object.get_display_name().to_string()))
-                # if not the Server object then walk the variables
-                if object.get_display_name().to_string() != "Server":
-                    walk_variables(object)
+            objects = root.get_child(["0:Objects"])
+            walk_objects(objects)
+            # for object in objects:
+            #     print("- {}".format(object.get_display_name().to_string()))
+            #     # if not the Server object then walk the variables
+            #     if object.get_display_name().to_string() != "Server":
+            #         for child in object.get_children():
+            #             walk_objects(child)
 
             # use subscription to get values
             handler = SubsriptionHandler()
@@ -210,7 +281,7 @@ async def main():
                 node = opcua_client.get_node(node)
                 handle = subscription.subscribe_data_change(node)
 
-            # need to process the incoming data outside the subscription notification so we can get information on the node           
+            # need to process the incoming data outside the subscription notification so we can get information on the node
             tasks = []
             tasks.append(asyncio.create_task(incoming_queue_processor()))
             await asyncio.gather(*tasks)
@@ -226,14 +297,15 @@ async def main():
             device_client.disconnect()
 
         else:
-            print('Cannot connect to Azure IoT Central please check the application settings and machine connectivity')
+            print(
+                "Cannot connect to Azure IoT Central please check the application settings and machine connectivity"
+            )
     except Exception as e:
         print(f"Exception: {str(e)}")
     finally:
         opcua_client.disconnect()
 
 
-
 if __name__ == "__main__":
-    opcua_client = Client("opc.tcp://localhost:4840/cnc_widget/server/")
+    opcua_client = Client("opc.tcp://localhost:4840/widget_co/server/")
     loop = asyncio.run(main())
