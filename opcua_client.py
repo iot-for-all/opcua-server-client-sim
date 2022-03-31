@@ -29,8 +29,8 @@ group_symmetric_key = ""
 
 # optional device settings - CHANGE IF DESIRED/NECESSARY
 provisioning_host = "global.azure-devices-provisioning.net"
-device_id = "factory_client"
-model_id = ""  # This model is available in the root of the Github repo (Failover.json) and can be imported into your Azure IoT central application
+device_id = "opcua_client_1"
+model_id = ""
 
 variable_nodes = []
 send_frequency = 1
@@ -109,7 +109,8 @@ def walk_variables(object, dump_data: dict):
                 for sub_var in variable.get_value().ua_types:
                     print("        - {}".format(sub_var[0]))
         else:
-            var_stack.append(variable)
+            for child in children:
+                var_stack.append(child)
 
 
 # def opcua_read_thread(client):
@@ -161,7 +162,8 @@ async def send_to_central(data):
         else:
             value = '"N/A"'
 
-        payload = f'{{"nodeid": "{data["nodeid"]}", "name": "{data["name"]}", "source_time_stamp": "{data["source_time_stamp"]}", "value": {value}}}'
+        # payload = f'{{"nodeid": "{data["nodeid"]}", "name": "{data["name"]}", "source_time_stamp": "{data["source_time_stamp"]}", "value": {value}}}'
+        payload = f'{{"{data["nodeid"]}": {{"name": "{data["name"]}", "source_time_stamp": "{data["source_time_stamp"]}", "value": {value}}}}}'
         print("sending message: %s" % (payload))
         msg = Message(payload)
         msg.content_type = "application/json"

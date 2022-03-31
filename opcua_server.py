@@ -2,6 +2,7 @@ import sys
 from opcua.ua.uaprotocol_auto import UadpWriterGroupMessageDataType, UserIdentityToken
 
 from opcua.ua.uatypes import VariantType
+
 sys.path.insert(0, "..")
 import time
 import json
@@ -11,6 +12,7 @@ from opcua import ua, Server
 from opcua.common.type_dictionary_buider import DataTypeDictionaryBuilder, get_ua_class
 
 value_update_frequency = 5
+
 
 def getdelta(type, function):
     delta_value = 0
@@ -37,6 +39,7 @@ def getdelta(type, function):
             delta_value = delta_value * -1
     return delta_value
 
+
 def process_children(children, parent):
     for child in children:
         if child["type"] == "object":
@@ -49,16 +52,26 @@ def process_children(children, parent):
             new_variable_state["var"] = None
             datatype = ua.VariantType.__dict__.get(child["type"])
             if datatype:
-                new_variable_state["var"] = parent.add_variable(idx, child["name"], child["value"], datatype)
+                new_variable_state["var"] = parent.add_variable(
+                    idx, child["name"], child["value"], datatype
+                )
             else:
                 # assume this is a custom datatype/struct
-                new_variable_state["var"] = parent.add_variable(idx, child["name"], ua.Variant(None, ua.VariantType.Null), datatype=custom_types[child["type"]].data_type)
+                new_variable_state["var"] = parent.add_variable(
+                    idx,
+                    child["name"],
+                    ua.Variant(None, ua.VariantType.Null),
+                    datatype=custom_types[child["type"]].data_type,
+                )
             if child["writable"]:
                 new_variable_state["var"].set_writable()
 
+
 if __name__ == "__main__":
     # load the config file
-    f = open('opcua_server.json',)
+    f = open(
+        "opcua_server.json",
+    )
     config = json.load(f)
     f.close()
 
@@ -72,7 +85,7 @@ if __name__ == "__main__":
     server.set_server_name(config["server"]["name"])
 
     # custom structure storage
-    datatype_builder = DataTypeDictionaryBuilder(server, idx, uri, 'customStructures')
+    datatype_builder = DataTypeDictionaryBuilder(server, idx, uri, "customStructures")
 
     # get Objects node, this is where we should put our nodes
     objects = server.get_objects_node()
@@ -82,7 +95,9 @@ if __name__ == "__main__":
     for struct in config["structures"]:
         custom_types[struct["name"]] = datatype_builder.create_data_type(struct["name"])
         for field in struct["fields"]:
-            custom_types[struct["name"]].add_field(field["name"], ua.VariantType.__dict__.get(field["type"]))
+            custom_types[struct["name"]].add_field(
+                field["name"], ua.VariantType.__dict__.get(field["type"])
+            )
 
     # save and load the custom structures into the server
     datatype_builder.set_dict_byte_string()
@@ -98,12 +113,14 @@ if __name__ == "__main__":
 
     # start the server
     server.start()
-    
+
     try:
         count = 0
         while True:
             for variable_state in variable_states:
-                delta_value = getdelta(variable_state["type"], variable_state["function"])
+                delta_value = getdelta(
+                    variable_state["type"], variable_state["function"]
+                )
                 datatype = ua.VariantType.__dict__.get(variable_state["type"])
                 if datatype:
                     variable_state["value"] = variable_state["value"] + delta_value
@@ -112,11 +129,15 @@ if __name__ == "__main__":
                     for sub_vars in variable_state["value"].ua_types:
                         current_val = getattr(variable_state["value"], sub_vars[0])
                         delta_value = getdelta(sub_vars[1], variable_state["function"])
-                        setattr(variable_state["value"], sub_vars[0][0], current_val + delta_value)
+                        setattr(
+                            variable_state["value"],
+                            sub_vars[0][0],
+                            current_val + delta_value,
+                        )
 
                 if variable_state["writable"]:
-                    variable_state["var"].set_value(variable_state["value"])    
+                    variable_state["var"].set_value(variable_state["value"])
             time.sleep(value_update_frequency)
     finally:
-        #close connection, remove subcsriptions, etc
+        # close connection, remove subcsriptions, etc
         server.stop()
