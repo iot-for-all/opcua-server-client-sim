@@ -44,3 +44,5 @@ To export the list of nodes to a JSON file in a compatible format for the IoTC I
 ```shell
 python opcua_client.py --dump <FILE_PATH>
 ```
+
+This will not run the client process and exits immediately after producing dump file.
