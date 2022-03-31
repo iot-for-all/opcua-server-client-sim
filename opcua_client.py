@@ -5,6 +5,8 @@ import base64
 import hmac
 import hashlib
 import asyncio
+from json import dumps
+from typing import List
 
 # import json
 sys.path.insert(0, "..")
@@ -21,8 +23,8 @@ from azure.iot.device import MethodResponse
 from azure.iot.device import exceptions
 
 # device settings - FILL IN YOUR VALUES HERE
-scope_id = "0ne00444031"
-group_symmetric_key = "ofBssFMd08Ut6PZf9htqUfxBvC1w/T8dca7sfvyydVVH6RZH0FB/1KbF0E7eLz+cwoGkyhzn3v62cmmb/9gb3g=="
+scope_id = ""
+group_symmetric_key = ""
 
 
 # optional device settings - CHANGE IF DESIRED/NECESSARY
@@ -57,27 +59,35 @@ class SubsriptionHandler(object):
         print("Python: New event", event)
 
 
-def walk_objects(object):
+def walk_objects(object, dump_data=None):
     variables = object.get_variables()
-    if object.get_display_name().to_string() != "Server":
-        incoming_queue.append(
-            {
-                "source_time_stamp": time.strftime(
-                    "%m/%d/%Y, %H:%M:%S", time.localtime()
-                ),
-                "nodeid": object.nodeid.to_string(),
-            }
-        )
+    object_name = object.get_display_name().to_string()
+    if object_name != "Server":
+        if object_name != "Objects":
+            dump_data[object_name] = {}
+            cur_obj = dump_data[object_name]
+        else:
+            cur_obj = dump_data
+
+        # incoming_queue.append(
+        #     {
+        #         "source_time_stamp": time.strftime(
+        #             "%m/%d/%Y, %H:%M:%S", time.localtime()
+        #         ),
+        #         "nodeid": object.nodeid.to_string(),
+        #     }
+        # )
         if len(variables) == 0:
             for child in object.get_children():
-                walk_objects(child)
+                walk_objects(child, cur_obj)
         else:
-            walk_variables(object)
+            walk_variables(object, cur_obj)
 
 
 # stack is redundant right now but need to move server to nodes with node class as an attribute
-def walk_variables(object):
+def walk_variables(object, dump_data: dict):
     var_stack = []
+    dump_data["tags"] = []
     variables = object.get_children()
     for variable in variables:
         var_stack.append(variable)
@@ -86,11 +96,15 @@ def walk_variables(object):
         variable = var_stack.pop()
         children = variable.get_children()
         if len(children) == 0:
-            variable_nodes.append(variable.nodeid.to_string())
-            print(
-                f"    - {variable.nodeid.to_string()} : {variable.get_display_name().to_string()}"
+            var_id = variable.nodeid.to_string()
+            var_name = variable.get_display_name().to_string()
+            var_type = variable.get_data_type_as_variant_type().name
+            variable_nodes.append(var_id)
+            dump_data["tags"].append(
+                {"nodeId": var_id, "name": var_name, "type": var_type}
             )
-            if variable.get_data_type_as_variant_type().name == "ExtensionObject":
+            print(f"    - {var_id} : {var_name}")
+            if var_type == "ExtensionObject":
                 # get the struct members
                 for sub_var in variable.get_value().ua_types:
                     print("        - {}".format(sub_var[0]))
@@ -147,7 +161,7 @@ async def send_to_central(data):
         else:
             value = '"N/A"'
 
-        payload = f'{{"nodeid": "{data["nodeid"]}", "name": "{data["name"]}","parent": "{data["parent"]}", "source_time_stamp": "{data["source_time_stamp"]}", "value": {value}}}'
+        payload = f'{{"nodeid": "{data["nodeid"]}", "name": "{data["name"]}", "source_time_stamp": "{data["source_time_stamp"]}", "value": {value}}}'
         print("sending message: %s" % (payload))
         msg = Message(payload)
         msg.content_type = "application/json"
@@ -165,9 +179,7 @@ async def incoming_queue_processor():
         if len(incoming_queue) > 0:
             data = incoming_queue.pop(0)
             node = opcua_client.get_node(data["nodeid"])
-            parent = node.get_parent()
             data["name"] = node.get_display_name().Text
-            data["parent"] = parent
             print(
                 "[{}] {} - {}".format(
                     data["source_time_stamp"],
@@ -176,7 +188,7 @@ async def incoming_queue_processor():
                 )
             )
             await send_to_central(data)
-            await asyncio.sleep(5)
+            await asyncio.sleep(2)
 
 
 # derives a symmetric device key for a device id using the group symmetric key
@@ -252,10 +264,10 @@ async def connect():
     return connected
 
 
-async def main():
+async def main(dump_file=None):
     try:
         # connect to IoT Central
-        if await connect():
+        if dump_file or await connect():
 
             # connect to the OPC-UA server
             opcua_client.session_timeout = 600000
@@ -266,13 +278,13 @@ async def main():
 
             # walk the objects and variable tree
             objects = root.get_child(["0:Objects"])
-            walk_objects(objects)
-            # for object in objects:
-            #     print("- {}".format(object.get_display_name().to_string()))
-            #     # if not the Server object then walk the variables
-            #     if object.get_display_name().to_string() != "Server":
-            #         for child in object.get_children():
-            #             walk_objects(child)
+            dump_data = [{}]
+            walk_objects(objects, dump_data=dump_data[0])
+            if dump_file:
+                file1 = open(dump_file, "w")
+                file1.write(dumps(dump_data))
+                file1.close()
+                return
 
             # use subscription to get values
             handler = SubsriptionHandler()
@@ -308,4 +320,6 @@ async def main():
 
 if __name__ == "__main__":
     opcua_client = Client("opc.tcp://localhost:4840/widget_co/server/")
-    loop = asyncio.run(main())
+    loop = asyncio.run(
+        main(sys.argv[2] if len(sys.argv) > 1 and sys.argv[1] == "--dump" else None)
+    )
