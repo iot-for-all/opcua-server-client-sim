@@ -19,702 +19,446 @@
                 {
                     "name": "z",
                     "type": "Float"
-                }         
+                }
             ]
         }
     ],
     "objects": [
         {
-            "name": "factory_building_#1",
-            "type": "object", 
+            "name": "ContosoFactory",
+            "type": "object",
             "children": [
                 {
-                    "name": "factory_floor_1",
-                    "type": "object", 
+                    "name": "Bulding01",
+                    "type": "object",
                     "children": [
                         {
-                            "name": "Widget_Maker_1000_1",
+                            "name": "Floor01",
                             "type": "object",
                             "children": [
                                 {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
+                                    "name": "Widget_Maker_1",
+                                    "type": "object",
+                                    "children": [
+                                        {
+                                            "name": "widget_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "inc"
+                                        },
+                                        {
+                                            "name": "spindle_rpm",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 1000.34,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "coolant_temp",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 27.5,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "error_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "rnd_inc"
+                                        },
+                                        {
+                                            "name": "vibration_3d",
+                                            "type": "accelerometer_struct",
+                                            "array": false,
+                                            "value": {
+                                                "x": 0.0,
+                                                "y": 0.0,
+                                                "z": 0.0
+                                            },
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        }
+                                    ]
                                 },
                                 {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
+                                    "name": "Widget_Maker_2",
+                                    "type": "object",
+                                    "children": [
+                                        {
+                                            "name": "widget_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "inc"
+                                        },
+                                        {
+                                            "name": "spindle_rpm",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 1000.34,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "coolant_temp",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 27.5,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "error_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "rnd_inc"
+                                        },
+                                        {
+                                            "name": "vibration_3d",
+                                            "type": "accelerometer_struct",
+                                            "array": false,
+                                            "value": {
+                                                "x": 0.0,
+                                                "y": 0.0,
+                                                "z": 0.0
+                                            },
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        }
+                                    ]
                                 }
                             ]
                         },
                         {
-                            "name": "CNC_2000_1",
+                            "name": "Floor02",
                             "type": "object",
                             "children": [
                                 {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
+                                    "name": "Widget_Maker_1",
+                                    "type": "object",
+                                    "children": [
+                                        {
+                                            "name": "widget_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "inc"
+                                        },
+                                        {
+                                            "name": "spindle_rpm",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 1000.34,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "coolant_temp",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 27.5,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "error_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "rnd_inc"
+                                        },
+                                        {
+                                            "name": "vibration_3d",
+                                            "type": "accelerometer_struct",
+                                            "array": false,
+                                            "value": {
+                                                "x": 0.0,
+                                                "y": 0.0,
+                                                "z": 0.0
+                                            },
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        }
+                                    ]
                                 },
                                 {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
+                                    "name": "Widget_Maker_2",
+                                    "type": "object",
+                                    "children": [
+                                        {
+                                            "name": "widget_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "inc"
+                                        },
+                                        {
+                                            "name": "spindle_rpm",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 1000.34,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "coolant_temp",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 27.5,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "error_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "rnd_inc"
+                                        },
+                                        {
+                                            "name": "vibration_3d",
+                                            "type": "accelerometer_struct",
+                                            "array": false,
+                                            "value": {
+                                                "x": 0.0,
+                                                "y": 0.0,
+                                                "z": 0.0
+                                            },
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        }
+                                    ]
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    "name": "factory_floor_2",
-                    "type": "object", 
+                    "name": "Bulding02",
+                    "type": "object",
                     "children": [
                         {
-                            "name": "Widget_Maker_1000_2",
+                            "name": "Floor01",
                             "type": "object",
                             "children": [
                                 {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
+                                    "name": "Widget_Maker_1",
+                                    "type": "object",
+                                    "children": [
+                                        {
+                                            "name": "widget_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "inc"
+                                        },
+                                        {
+                                            "name": "spindle_rpm",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 1000.34,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "coolant_temp",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 27.5,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "error_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "rnd_inc"
+                                        },
+                                        {
+                                            "name": "vibration_3d",
+                                            "type": "accelerometer_struct",
+                                            "array": false,
+                                            "value": {
+                                                "x": 0.0,
+                                                "y": 0.0,
+                                                "z": 0.0
+                                            },
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        }
+                                    ]
                                 },
                                 {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
+                                    "name": "Widget_Maker_2",
+                                    "type": "object",
+                                    "children": [
+                                        {
+                                            "name": "widget_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "inc"
+                                        },
+                                        {
+                                            "name": "spindle_rpm",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 1000.34,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "coolant_temp",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 27.5,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "error_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "rnd_inc"
+                                        },
+                                        {
+                                            "name": "vibration_3d",
+                                            "type": "accelerometer_struct",
+                                            "array": false,
+                                            "value": {
+                                                "x": 0.0,
+                                                "y": 0.0,
+                                                "z": 0.0
+                                            },
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        }
+                                    ]
                                 }
                             ]
                         },
                         {
-                            "name": "CNC_2000_2",
+                            "name": "Floor02",
                             "type": "object",
                             "children": [
                                 {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
+                                    "name": "Widget_Maker_1",
+                                    "type": "object",
+                                    "children": [
+                                        {
+                                            "name": "widget_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "inc"
+                                        },
+                                        {
+                                            "name": "spindle_rpm",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 1000.34,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "coolant_temp",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 27.5,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "error_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "rnd_inc"
+                                        },
+                                        {
+                                            "name": "vibration_3d",
+                                            "type": "accelerometer_struct",
+                                            "array": false,
+                                            "value": {
+                                                "x": 0.0,
+                                                "y": 0.0,
+                                                "z": 0.0
+                                            },
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        }
+                                    ]
                                 },
                                 {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "factory_floor_3",
-                    "type": "object", 
-                    "children": [
-                        {
-                            "name": "Widget_Maker_1000_3",
-                            "type": "object",
-                            "children": [
-                                {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
-                                },
-                                {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "CNC_2000_3",
-                            "type": "object",
-                            "children": [
-                                {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
-                                },
-                                {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "factory_building_#2",
-            "type": "object", 
-            "children": [
-                {
-                    "name": "factory_floor_1",
-                    "type": "object", 
-                    "children": [
-                        {
-                            "name": "Widget_Maker_1000_1",
-                            "type": "object",
-                            "children": [
-                                {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
-                                },
-                                {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "CNC_2000_1",
-                            "type": "object",
-                            "children": [
-                                {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
-                                },
-                                {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "factory_floor_2",
-                    "type": "object", 
-                    "children": [
-                        {
-                            "name": "Widget_Maker_1000_2",
-                            "type": "object",
-                            "children": [
-                                {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
-                                },
-                                {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "CNC_2000_2",
-                            "type": "object",
-                            "children": [
-                                {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
-                                },
-                                {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "factory_floor_3",
-                    "type": "object", 
-                    "children": [
-                        {
-                            "name": "Widget_Maker_1000_3",
-                            "type": "object",
-                            "children": [
-                                {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
-                                },
-                                {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "CNC_2000_3",
-                            "type": "object",
-                            "children": [
-                                {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
-                                },
-                                {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "factory_floor_4",
-                    "type": "object", 
-                    "children": [
-                        {
-                            "name": "Widget_Maker_1000_4",
-                            "type": "object",
-                            "children": [
-                                {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
-                                },
-                                {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "CNC_2000_4",
-                            "type": "object",
-                            "children": [
-                                {
-                                    "name": "widget_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "inc"
-                                },
-                                {
-                                    "name": "spindle_rpm",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 1000.34,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },
-                                {
-                                    "name": "coolant_temp",
-                                    "type": "Float",
-                                    "array": false,
-                                    "value": 27.5,
-                                    "writable": true,
-                                    "function": "rnd_walk"
-                                },      
-                                {
-                                    "name": "error_count",
-                                    "type": "Int32",
-                                    "array": false,
-                                    "value": 0,
-                                    "writable": true,
-                                    "function": "rnd_inc"
-                                },               
-                                {
-                                    "name": "vibration_3d",
-                                    "type": "accelerometer_struct",
-                                    "array": false,
-                                    "value": {"x": 0.0, "y": 0.0, "z": 0.0},
-                                    "writable": true,
-                                    "function": "rnd_walk"
+                                    "name": "Widget_Maker_2",
+                                    "type": "object",
+                                    "children": [
+                                        {
+                                            "name": "widget_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "inc"
+                                        },
+                                        {
+                                            "name": "spindle_rpm",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 1000.34,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "coolant_temp",
+                                            "type": "Float",
+                                            "array": false,
+                                            "value": 27.5,
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        },
+                                        {
+                                            "name": "error_count",
+                                            "type": "Int32",
+                                            "array": false,
+                                            "value": 0,
+                                            "writable": true,
+                                            "function": "rnd_inc"
+                                        },
+                                        {
+                                            "name": "vibration_3d",
+                                            "type": "accelerometer_struct",
+                                            "array": false,
+                                            "value": {
+                                                "x": 0.0,
+                                                "y": 0.0,
+                                                "z": 0.0
+                                            },
+                                            "writable": true,
+                                            "function": "rnd_walk"
+                                        }
+                                    ]
                                 }
                             ]
                         }
